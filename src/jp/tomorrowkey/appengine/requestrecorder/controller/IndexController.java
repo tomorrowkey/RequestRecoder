@@ -6,6 +6,7 @@ import jp.tomorrowkey.appengine.requestrecorder.model.RequestRecord;
 import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
 import org.slim3.datastore.Datastore;
+import org.slim3.util.StringUtil;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -21,6 +22,13 @@ public class IndexController extends Controller {
             requestScope("requestRecordList", requestRecordList);
 
             return forward("/index.jsp");
+        }
+
+        if (StringUtil.isEmpty(userAgent)) {
+            PrintWriter writer = response.getWriter();
+            writer.append("UserAgent must not be empty\n");
+            writer.flush();
+            return null;
         }
 
         RequestRecord requestRecord = new RequestRecord(request);
@@ -45,7 +53,7 @@ public class IndexController extends Controller {
         }
 
         PrintWriter writer = response.getWriter();
-        writer.append("Your Request is recorded");
+        writer.append("Your Request is recorded\n");
         writer.flush();
         return null;
     }
